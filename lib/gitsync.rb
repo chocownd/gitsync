@@ -9,4 +9,8 @@ module Gitsync
     result = system cmd
     !result.nil? && result
   end
+
+  def self.check_repo_exist
+    exccmd 'git branch 1> /dev/null 2>&1'
+  end
 end
