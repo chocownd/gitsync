@@ -1,5 +1,7 @@
 require "gitsync/version"
 
 module Gitsync
-  # Your code goes here...
+  def self.up
+    raise NotImplementedError
+  end
 end
