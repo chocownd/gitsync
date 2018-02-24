@@ -1,0 +1,22 @@
+PATH
+  remote: .
+  specs:
+    gitsync (0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.11.3)
+    rake (12.3.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.16)
+  gitsync!
+  minitest (~> 5.11)
+  rake (~> 12.3)
+
+BUNDLED WITH
+   1.16.1
