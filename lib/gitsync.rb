@@ -24,18 +24,24 @@ module Gitsync
   end
 
   def self.git_up
-    raise GitsyncError, 'git up failed' unless
-        CommandTool.exccmd 'git pull --rebase --autostash'
+    result = CommandTool.exccmd 'git pull --rebase --autostash'
+    raise GitsyncError, fail_msg('git up failed', result[:msg]) unless
+        result[:succ]
   end
 
   def self.raise_if_syncup_branch_exist
-    raise GitsyncError, 'syncup branch is already exist' if
-        CommandTool.exccmd "git show-branch #{SYNC_BRANCH}"
+    result = CommandTool.exccmd "git show-branch #{SYNC_BRANCH}"
+
+    if result[:succ]
+      raise GitsyncError, fail_msg('syncup branch is already exist',
+                                   result[:msg])
+    end
   end
 
   def self.stash_all
-    raise GitsyncError, 'stash all failed' unless
-        CommandTool.exccmd 'git stash --include-untracked'
+    result = CommandTool.exccmd 'git stash --include-untracked'
+    raise GitsyncError, fail_msg('stash failed', result[:msg]) unless
+        result[:succ]
   end
 
   def self.create_syncup_branch(head)
@@ -51,6 +57,10 @@ module Gitsync
   end
 
   def self.check_repo_exist
-    CommandTool.exccmd 'git branch 1> /dev/null 2>&1'
+    CommandTool.exccmd('git branch')[:succ]
+  end
+
+  def self.fail_msg(head, msg)
+    head + "\n" + msg
   end
 end
