@@ -1,8 +1,13 @@
 require "gitsync/version"
+require 'gitsync/exceptions/gitsync_error'
 
 module Gitsync
   def self.up
     raise NotImplementedError
+  end
+
+  def self.raise_if_git_not_inited
+    raise GitsyncError, 'git is not inited' unless check_repo_exist
   end
 
   def self.exccmd(cmd)

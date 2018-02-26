@@ -5,6 +5,16 @@ class GitsyncTest < Minitest::Test
     refute_nil ::Gitsync::VERSION
   end
 
+  def test_raise_if_git_not_inited
+    # assume there are no git repository in root dir
+    except = assert_raises GitsyncError do
+      Dir.chdir('/') { Gitsync.raise_if_git_not_inited }
+    end
+    assert_equal 'git is not inited', except.message
+    # assume this test file is managed under git vcs
+    assert_nil Gitsync.raise_if_git_not_inited
+  end
+
   def test_exccmd
     assert !Gitsync.exccmd('ls ------very-illegal-option 2> /dev/null')
     assert Gitsync.exccmd('ls 1> /dev/null')
