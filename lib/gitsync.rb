@@ -34,7 +34,8 @@ module Gitsync
   end
 
   def self.stash_all
-    raise NotImplementedError
+    raise GitsyncError, 'stash all failed' unless
+        CommandTool.exccmd 'git stash --include-untracked'
   end
 
   def self.create_syncup_branch(head)
