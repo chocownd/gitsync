@@ -15,11 +15,6 @@ class GitsyncTest < Minitest::Test
     assert_nil Gitsync.raise_if_git_not_inited
   end
 
-  def test_exccmd
-    assert !Gitsync.exccmd('ls ------very-illegal-option 2> /dev/null')
-    assert Gitsync.exccmd('ls 1> /dev/null')
-  end
-
   def test_check_repo_exist
     # assume there are no git repository in root dir
     Dir.chdir('/') { assert !Gitsync.check_repo_exist }
