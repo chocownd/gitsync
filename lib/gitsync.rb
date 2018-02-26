@@ -10,8 +10,8 @@ module Gitsync
       raise_if_git_not_inited
       git_up
       raise_if_syncup_branch_exist
-      head = stash_all
-      create_syncup_branch head
+      stash_all
+      create_syncup_branch
       push_syncup_branch
       checkout_working_branch
     rescue GitsyncError => e
@@ -44,8 +44,11 @@ module Gitsync
         result[:succ]
   end
 
-  def self.create_syncup_branch(head)
-    raise NotImplementedError
+  def self.create_syncup_branch
+    result = CommandTool.exccmd "git branch #{SYNC_BRANCH} stash@{0}"
+    unless result[:succ]
+      raise GitsyncError, fail_msg('create syncup branch failed', result[msg])
+    end
   end
 
   def self.push_syncup_branch
