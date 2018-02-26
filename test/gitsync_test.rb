@@ -15,6 +15,10 @@ class GitsyncTest < Minitest::Test
     assert_nil Gitsync.raise_if_git_not_inited
   end
 
+  def test_raise_if_syncup_branch_exist
+    Gitsync.raise_if_syncup_branch_exist
+  end
+
   def test_check_repo_exist
     # assume there are no git repository in root dir
     Dir.chdir('/') { assert !Gitsync.check_repo_exist }

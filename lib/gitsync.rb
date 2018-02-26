@@ -29,7 +29,8 @@ module Gitsync
   end
 
   def self.raise_if_syncup_branch_exist
-    raise NotImplementedError
+    raise GitsyncError, 'syncup branch is already exist' if
+        CommandTool.exccmd "git show-branch #{SYNC_BRANCH}"
   end
 
   def self.stash_all
