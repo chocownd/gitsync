@@ -47,12 +47,15 @@ module Gitsync
   def self.create_syncup_branch
     result = CommandTool.exccmd "git branch #{SYNC_BRANCH} stash@{0}"
     unless result[:succ]
-      raise GitsyncError, fail_msg('create syncup branch failed', result[msg])
+      raise GitsyncError, fail_msg('create syncup branch failed', result[:msg])
     end
   end
 
   def self.push_syncup_branch
-    raise NotImplementedError
+    result = CommandTool.exccmd "git push origin #{SYNC_BRANCH}:#{SYNC_BRANCH}"
+    unless result[:succ]
+      raise GitsyncError, fail_msg('push syncup branch failed', result[:msg])
+    end
   end
 
   def self.checkout_working_branch
