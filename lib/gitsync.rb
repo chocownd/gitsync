@@ -24,7 +24,8 @@ module Gitsync
   end
 
   def self.git_up
-    raise NotImplementedError
+    raise GitsyncError, 'git up failed' unless
+        CommandTool.exccmd 'git pull --rebase --autostash'
   end
 
   def self.raise_if_syncup_branch_exist
