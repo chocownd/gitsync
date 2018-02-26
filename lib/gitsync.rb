@@ -13,7 +13,7 @@ module Gitsync
       stash_all
       create_syncup_branch
       push_syncup_branch
-      checkout_working_branch
+      tear_down
     rescue GitsyncError => e
       puts e.message
     end
@@ -30,7 +30,7 @@ module Gitsync
   end
 
   def self.raise_if_syncup_branch_exist
-    result = CommandTool.exccmd "git show-branch #{SYNC_BRANCH}"
+    result = CommandTool.exccmd "git show-branch origin/#{SYNC_BRANCH}"
 
     if result[:succ]
       raise GitsyncError, fail_msg('syncup branch is already exist',
@@ -58,8 +58,16 @@ module Gitsync
     end
   end
 
-  def self.checkout_working_branch
-    raise NotImplementedError
+  def self.tear_down
+    result = CommandTool.exccmd "git branch -D #{SYNC_BRANCH}"
+    unless result[:succ]
+      raise GitsyncError, fail_msg('delete syncup branch failed', result[:msg])
+    end
+
+    result = CommandTool.exccmd 'git stash drop stash@{0}'
+    unless result[:succ]
+      raise GitsyncError, fail_msg('drop stash failed', result[:msg])
+    end
   end
 
   def self.check_repo_exist
