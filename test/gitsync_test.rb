@@ -5,7 +5,8 @@ class GitsyncTest < Minitest::Test
     refute_nil ::Gitsync::VERSION
   end
 
-  def test_it_does_something_useful
-    assert false
+  def test_exccmd
+    assert !Gitsync.exccmd('ls ------very-illegal-option 2> /dev/null')
+    assert Gitsync.exccmd('ls 1> /dev/null')
   end
 end
