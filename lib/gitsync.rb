@@ -26,6 +26,7 @@ module Gitsync
   end
 
   def self.raise_if_syncup_branch_exist
+    puts 'check whether sync-up branch is already exist...'
     result = CommandTool.exccmd('git ls-remote --heads --exit-code ' \
                                     "origin #{SYNC_BRANCH}")
     if result[:succ]
