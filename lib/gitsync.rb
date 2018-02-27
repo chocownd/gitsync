@@ -9,6 +9,7 @@ module Gitsync
   def self.up
     begin
       raise_if_git_not_inited
+      prune_remote
       raise_if_syncup_branch_exist
       stash_all
       create_syncup_branch
@@ -24,6 +25,14 @@ module Gitsync
     result = CommandTool.exccmd('git branch')
     raise GitsyncError, fail_msg('git is not inited') unless result[:succ]
     puts 'exist!'
+  end
+
+  def self.prune_remote
+    puts 'try prune remote'
+    result = CommandTool.exccmd 'git remote prune origin'
+    raise GitsyncError, fail_msg('git remote prune failed', result[:msg]) unless
+        result[:succ]
+    puts 'remote prune success!'
   end
 
   def self.raise_if_syncup_branch_exist
