@@ -112,7 +112,12 @@ module Gitsync
   end
 
   def self.apply_remote_syncup_branch
-    raise NotImplementedError
+    puts 'try apply remote sync-up branch...'
+    result = CommandTool.exccmd "git stash apply origin/#{SYNC_BRANCH} --index"
+    unless result[:succ]
+      raise GitsyncError, fail_msg('apply syncup branch failed', result[:msg])
+    end
+    puts 'apply success!'
   end
 
   def self.delete_remote_syncup_branch
