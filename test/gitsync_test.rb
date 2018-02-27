@@ -10,19 +10,11 @@ class GitsyncTest < Minitest::Test
     except = assert_raises GitsyncError do
       Dir.chdir('/') { Gitsync.raise_if_git_not_inited }
     end
-    assert_equal 'git is not inited', except.message
     # assume this test file is managed under git vcs
     assert_nil Gitsync.raise_if_git_not_inited
   end
 
   def test_raise_if_syncup_branch_exist
     Gitsync.raise_if_syncup_branch_exist
-  end
-
-  def test_check_repo_exist
-    # assume there are no git repository in root dir
-    Dir.chdir('/') { assert !Gitsync.check_repo_exist }
-    # assume this test file is managed under git vcs
-    assert Gitsync.check_repo_exist
   end
 end

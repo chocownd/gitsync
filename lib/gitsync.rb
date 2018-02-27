@@ -19,7 +19,10 @@ module Gitsync
   end
 
   def self.raise_if_git_not_inited
-    raise GitsyncError, 'git is not inited' unless check_repo_exist
+    puts 'check git repository exist...'
+    result = CommandTool.exccmd('git branch')
+    raise GitsyncError, fail_msg('git is not inited', '') unless
+        result[:succ]
   end
 
   def self.raise_if_syncup_branch_exist
@@ -67,10 +70,6 @@ module Gitsync
     unless result[:succ]
       raise GitsyncError, fail_msg('drop stash failed', result[:msg])
     end
-  end
-
-  def self.check_repo_exist
-    CommandTool.exccmd('git branch')[:succ]
   end
 
   def self.fail_msg(head, msg)
