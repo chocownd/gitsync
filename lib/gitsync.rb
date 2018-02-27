@@ -23,10 +23,16 @@ module Gitsync
   end
 
   def self.raise_if_syncup_branch_exist
-    result = CommandTool.exccmd "git show-branch origin/#{SYNC_BRANCH}"
-
+    result = CommandTool.exccmd('git ls-remote --heads --exit-code ' \
+                                    "origin #{SYNC_BRANCH}")
     if result[:succ]
-      raise GitsyncError, fail_msg('syncup branch is already exist',
+      raise GitsyncError, fail_msg('syncup branch is already exist in remote',
+                                   result[:msg])
+    end
+
+    result = CommandTool.exccmd("git branch | grep -w #{SYNC_BRANCH}")
+    if result[:succ]
+      raise GitsyncError, fail_msg('syncup branch is already exist in local',
                                    result[:msg])
     end
   end
