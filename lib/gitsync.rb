@@ -18,6 +18,18 @@ module Gitsync
     puts e.message
   end
 
+  def self.down
+    raise_if_git_not_inited
+    prune_remote
+    raise_if_remote_syncup_branch_not_exist
+    fetch_remote_syncup_branch
+    apply_remote_syncup_branch
+    delete_remote_syncup_branch
+    prune_remote
+  rescue GitsyncError => e
+    puts e.message
+  end
+
   def self.raise_if_git_not_inited
     puts 'check git repository exist...'
     result = CommandTool.exccmd('git branch')
@@ -50,6 +62,17 @@ module Gitsync
     puts 'not exist!'
   end
 
+  def self.raise_if_remote_syncup_branch_not_exist
+    puts 'check sync-up branch exist in remote...'
+    result = CommandTool.exccmd('git ls-remote --heads --exit-code ' \
+                                    "origin #{SYNC_BRANCH}")
+    unless result[:succ]
+      raise GitsyncError, fail_msg('sync-up branch is not exist in remote',
+                                   result[:msg])
+    end
+    puts 'found!'
+  end
+
   def self.stash_all
     puts 'try create temporary stash...'
     result = CommandTool.exccmd 'git stash --include-untracked'
@@ -77,6 +100,33 @@ module Gitsync
       raise GitsyncError, fail_msg('push syncup branch failed', result[:msg])
     end
     puts "push branch '#{SYNC_BRANCH}' success!"
+  end
+
+  def self.fetch_remote_syncup_branch
+    puts 'try fetch remote sync-up branch...'
+    result = CommandTool.exccmd "git fetch origin #{SYNC_BRANCH}"
+    unless result[:succ]
+      raise GitsyncError, fail_msg('fetch syncup branch failed', result[:msg])
+    end
+    puts 'fetch success!'
+  end
+
+  def self.apply_remote_syncup_branch
+    puts 'try apply remote sync-up branch...'
+    result = CommandTool.exccmd "git stash apply origin/#{SYNC_BRANCH} --index"
+    unless result[:succ]
+      raise GitsyncError, fail_msg('apply syncup branch failed', result[:msg])
+    end
+    puts 'apply success!'
+  end
+
+  def self.delete_remote_syncup_branch
+    puts 'try delete remote sync-up branch...'
+    result = CommandTool.exccmd "git push origin --delete #{SYNC_BRANCH}"
+    unless result[:succ]
+      raise GitsyncError, fail_msg('delete syncup branch failed', result[:msg])
+    end
+    puts 'delete success!'
   end
 
   def self.tear_down
