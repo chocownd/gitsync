@@ -7,17 +7,15 @@ module Gitsync
   SYNC_BRANCH = 'git-sync-up'.freeze
 
   def self.up
-    begin
-      raise_if_git_not_inited
-      prune_remote
-      raise_if_syncup_branch_exist
-      stash_all
-      create_syncup_branch
-      push_syncup_branch
-      tear_down
-    rescue GitsyncError => e
-      puts e.message
-    end
+    raise_if_git_not_inited
+    prune_remote
+    raise_if_syncup_branch_exist
+    stash_all
+    create_syncup_branch
+    push_syncup_branch
+    tear_down
+  rescue GitsyncError => e
+    puts e.message
   end
 
   def self.raise_if_git_not_inited
