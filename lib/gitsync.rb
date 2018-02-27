@@ -74,6 +74,6 @@ module Gitsync
   end
 
   def self.fail_msg(head, msg)
-    head + "\n" + msg
+    "fatal: #{head}\n#{msg}"
   end
 end
