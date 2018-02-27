@@ -42,9 +42,13 @@ module Gitsync
   end
 
   def self.stash_all
+    puts 'try stash all...'
     result = CommandTool.exccmd 'git stash --include-untracked'
-    raise GitsyncError, fail_msg('stash failed', result[:msg]) unless
-        result[:succ]
+    if !result[:succ]
+      raise GitsyncError, fail_msg('stash failed', result[:msg])
+    elsif result[:msg].include? 'No local changes to save'
+      raise GitsyncError, fail_msg('no local changes to sync up', '')
+    end
   end
 
   def self.create_syncup_branch
