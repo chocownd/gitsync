@@ -121,7 +121,12 @@ module Gitsync
   end
 
   def self.delete_remote_syncup_branch
-    raise NotImplementedError
+    puts 'try delete remote sync-up branch...'
+    result = CommandTool.exccmd "git push origin --delete #{SYNC_BRANCH}"
+    unless result[:succ]
+      raise GitsyncError, fail_msg('delete syncup branch failed', result[:msg])
+    end
+    puts 'delete success!'
   end
 
   def self.tear_down
