@@ -5,7 +5,16 @@ class GitsyncTest < Minitest::Test
     refute_nil ::Gitsync::VERSION
   end
 
-  def test_it_does_something_useful
-    assert false
+  def test_raise_if_git_not_inited
+    # assume there are no git repository in root dir
+    except = assert_raises GitsyncError do
+      Dir.chdir('/') { Gitsync.raise_if_git_not_inited }
+    end
+    # assume this test file is managed under git vcs
+    assert_nil Gitsync.raise_if_git_not_inited
+  end
+
+  def test_raise_if_syncup_branch_exist
+    Gitsync.raise_if_syncup_branch_exist
   end
 end
