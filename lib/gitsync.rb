@@ -103,7 +103,12 @@ module Gitsync
   end
 
   def self.fetch_remote_syncup_branch
-    raise NotImplementedError
+    puts 'try fetch remote sync-up branch...'
+    result = CommandTool.exccmd "git fetch origin #{SYNC_BRANCH}"
+    unless result[:succ]
+      raise GitsyncError, fail_msg('fetch syncup branch failed', result[:msg])
+    end
+    puts 'fetch success!'
   end
 
   def self.apply_remote_syncup_branch
