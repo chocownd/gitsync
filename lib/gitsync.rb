@@ -62,8 +62,15 @@ module Gitsync
     puts 'not exist!'
   end
 
-  def raise_if_remote_syncup_branch_not_exist
-    raise NotImplementedError
+  def self.raise_if_remote_syncup_branch_not_exist
+    puts 'check sync-up branch exist in remote...'
+    result = CommandTool.exccmd('git ls-remote --heads --exit-code ' \
+                                    "origin #{SYNC_BRANCH}")
+    unless result[:succ]
+      raise GitsyncError, fail_msg('sync-up branch is not exist in remote',
+                                   result[:msg])
+    end
+    puts 'found!'
   end
 
   def self.stash_all
@@ -95,15 +102,15 @@ module Gitsync
     puts "push branch '#{SYNC_BRANCH}' success!"
   end
 
-  def fetch_remote_syncup_branch
+  def self.fetch_remote_syncup_branch
     raise NotImplementedError
   end
 
-  def apply_remote_syncup_branch
+  def self.apply_remote_syncup_branch
     raise NotImplementedError
   end
 
-  def delete_remote_syncup_branch
+  def self.delete_remote_syncup_branch
     raise NotImplementedError
   end
 
