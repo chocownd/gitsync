@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gitsync (0.1.0)
+    seamless-git (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -14,9 +14,9 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.16)
-  gitsync!
   minitest (~> 5.11)
   rake (~> 12.3)
+  seamless-git!
 
 BUNDLED WITH
    1.16.1
