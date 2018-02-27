@@ -1,0 +1,2 @@
+class GitsyncError < StandardError
+end
