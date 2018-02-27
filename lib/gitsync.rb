@@ -8,7 +8,6 @@ module Gitsync
   def self.up
     begin
       raise_if_git_not_inited
-      git_up
       raise_if_syncup_branch_exist
       stash_all
       create_syncup_branch
@@ -21,12 +20,6 @@ module Gitsync
 
   def self.raise_if_git_not_inited
     raise GitsyncError, 'git is not inited' unless check_repo_exist
-  end
-
-  def self.git_up
-    result = CommandTool.exccmd 'git pull --rebase --autostash'
-    raise GitsyncError, fail_msg('git up failed', result[:msg]) unless
-        result[:succ]
   end
 
   def self.raise_if_syncup_branch_exist
