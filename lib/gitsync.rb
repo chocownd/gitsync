@@ -21,7 +21,7 @@ module Gitsync
   def self.raise_if_git_not_inited
     puts 'check git repository exist...'
     result = CommandTool.exccmd('git branch')
-    raise GitsyncError, fail_msg('git is not inited', '') unless
+    raise GitsyncError, fail_msg('git is not inited') unless
         result[:succ]
   end
 
@@ -47,7 +47,7 @@ module Gitsync
     if !result[:succ]
       raise GitsyncError, fail_msg('stash failed', result[:msg])
     elsif result[:msg].include? 'No local changes to save'
-      raise GitsyncError, fail_msg('no local changes to sync up', '')
+      raise GitsyncError, fail_msg('no local changes to sync up')
     end
   end
 
@@ -77,7 +77,7 @@ module Gitsync
     end
   end
 
-  def self.fail_msg(head, msg)
+  def self.fail_msg(head, msg = nil)
     "fatal: #{head}\n#{msg}"
   end
 end
