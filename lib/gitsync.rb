@@ -136,6 +136,13 @@ module Gitsync
       raise GitsyncError, fail_msg('delete syncup branch failed', result[:msg])
     end
     puts "delete branch '#{SYNC_BRANCH}' success!"
+    puts 'try hide remote sync-up branch from local repository...'
+    result = CommandTool.exccmd 'git branch --remotes ' \
+                                "--delete origin/#{SYNC_BRANCH}"
+    unless result[:succ]
+      raise GitsyncError, fail_msg('hide syncup branch failed', result[:msg])
+    end
+    puts "hide branch '#{SYNC_BRANCH}' from local repository success!"
     puts 'try get rid of temporary stash...'
     result = CommandTool.exccmd 'git stash drop stash@{0}'
     unless result[:succ]
